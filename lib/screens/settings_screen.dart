@@ -48,12 +48,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
               ),
-              // Requirements:
-              // - Use CupertinoSliverNavigationBar
-              // - Display a large title when fully expanded
-              // - Include a CupertinoSearchTextField as the bottom widget
-              // - Configure bottomMode to hide search field on scroll
-              // - Navigation bar should snap between expanded and collapsed states
               
               SliverToBoxAdapter(
                 child: Padding(
@@ -81,11 +75,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         'Terms & Conditions',
                         CupertinoIcons.doc_text,
                         onTap: () {
-                          // TODO: Implement showCupertinoSheet
-                          // Requirements:
-                          // - Use the new showCupertinoSheet function
-                          // - Show placeholder terms and conditions text
-                          // - Allow dismissal via drag-to-dismiss gesture
+                          showCupertinoModalPopup(
+                            context: context,
+                            builder: (context) => CupertinoActionSheet(
+                              title: const Text('Terms & Conditions'),
+                              message: const Text(
+                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.',
+                              ),
+                              actions: [
+                                CupertinoActionSheetAction(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Accept'),
+                                ),
+                                CupertinoActionSheetAction(
+                                  isDestructiveAction: true,
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Decline'),
+                                ),
+                              ],
+                              cancelButton: CupertinoActionSheetAction(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                            ),
+                          );
                         },
                       ),
                       
