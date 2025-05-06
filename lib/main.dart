@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'screens/settings_screen.dart';
+
 import 'screens/search_screen.dart';
+import 'screens/settings_screen.dart';
 import 'screens/user_profile_screen.dart';
-import 'providers/user_provider.dart';
-import 'providers/search_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,25 +13,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        // TODO: Add providers for state management
-        // Hint: Use ChangeNotifierProvider for both search and user profile
-      ],
-      child: MaterialApp(
-        title: 'Flutter Coding Test',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          useMaterial3: true,
-        ),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const HomePage(),
-          '/settings': (context) => const SettingsScreen(),
-          '/search': (context) => const SearchScreen(),
-          '/user-profile': (context) => const UserProfileScreen(userId: '1'),
-        },
+    return MaterialApp(
+      title: 'Flutter Coding Test',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: true,
       ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomePage(),
+        '/settings': (context) => SettingsScreen(),
+        '/search': (context) => const SearchScreen(),
+        '/user-profile': (context) => const UserProfileScreen(userId: '1'),
+      },
     );
   }
 }
