@@ -76,15 +76,6 @@ class _SearchScreenState extends State<SearchScreen> {
             // - Empty state
             // - Success state with results
             
-            Expanded(
-              child: Center(
-                child: Text(
-                  'Implement search functionality using RxDart and Provider',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ),
-            ),
           ],
         ),
       ),
