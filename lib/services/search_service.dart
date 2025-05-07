@@ -1,14 +1,48 @@
-// TODO: Implement a mock search service
-// Requirements:
-// - Create a class that simulates fetching data with a delay
-// - Implement a searchProducts method that returns a Future<List<String>>
-// - Return an empty list for empty queries
-// - Simulate a short delay (500ms)
-
 class SearchService {
-  // TODO: Implement searchProducts method
+  final List<String> _mockProducts = [
+    'iPhone 15',
+    'Galaxy S23',
+    'Pixel 8',
+    'OnePlus 11',
+    'Xiaomi 13',
+    'MacBook Pro',
+    'Dell XPS',
+    'HP Spectre',
+    'Lenovo ThinkPad',
+    'Surface Laptop',
+    'iPad Pro',
+    'Galaxy Tab',
+    'Surface Pro',
+    'Fire Tablet',
+    'AirPods Pro',
+    'Sony Headphones',
+    'Bose Headphones',
+    'Galaxy Buds',
+    'Apple Watch',
+    'Galaxy Watch',
+    'Pixel Watch',
+    'Google Nest',
+    'Amazon Echo',
+    'HomePod mini',
+    'PlayStation 5',
+    'Xbox Series X',
+    'Nintendo Switch',
+    'MagSafe Charger',
+    'Power Bank',
+    'Wireless Keyboard'
+  ];
+
   Future<List<String>> searchProducts(String query) async {
-    // TODO: Add mock product search logic with delay
-    throw UnimplementedError('searchProducts has not been implemented');
+    await Future.delayed(const Duration(milliseconds: 500));
+    
+    if (query.isEmpty) return [];
+    
+    if (query.toLowerCase() == 'error') {
+      throw Exception('Failed to fetch search results');
+    }
+    
+    return _mockProducts.where((product) => 
+      product.toLowerCase().contains(query.toLowerCase())
+    ).toList();
   }
 }
