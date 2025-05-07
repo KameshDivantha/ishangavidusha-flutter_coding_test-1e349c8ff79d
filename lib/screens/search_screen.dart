@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/search_provider.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -9,15 +12,16 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: Implement the search screen UI
-    // Requirements:
-    // - Create a TextField for user input
-    // - Display search results in a ListView
-    // - Show loading indicator while waiting for results
-    // - Display a message if no results or errors
-    // - Connect to the SearchProvider for state
+    final searchProvider = context.watch<SearchProvider>();
     
     return Scaffold(
       appBar: AppBar(
@@ -28,6 +32,7 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           children: [
             TextField(
+              controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Search',
                 hintStyle: TextStyle(
@@ -68,17 +73,83 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               textInputAction: TextInputAction.search,
               onTapOutside: (_) => FocusScope.of(context).unfocus(),
+              onChanged: (value) {
+                searchProvider.search(value);
+              },
             ),
-            
-            // TODO: Implement the results ListView with appropriate states
-            // - Loading state
-            // - Error state
-            // - Empty state
-            // - Success state with results
-            
+
+            SizedBox(height: 16,),
+            Expanded(
+              child: _buildResultsView(searchProvider),
+            )
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildResultsView(SearchProvider provider) {
+    switch (provider.state) {
+      case SearchState.initial:
+        return const Center(
+          child: Text(
+            'Start typing to search products',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+        );
+      case SearchState.loading:
+        return const Center(child: CircularProgressIndicator());
+      case SearchState.empty:
+        return const Center(
+          child: Text(
+            'No products found',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+        );
+      case SearchState.error:
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, color: Colors.red, size: 40),
+              const SizedBox(height: 8),
+              Text(
+                provider.errorMessage,
+                style: const TextStyle(fontSize: 16, color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => provider.search(_searchController.text),
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
+        );
+      case SearchState.success:
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: provider.results.length,
+            itemBuilder: (context, index) {
+              return Card(
+                margin: const EdgeInsets.only(bottom: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: ListTile(
+                  title: Text(provider.results[index]),
+                  onTap: () {},
+                ),
+              );
+            },
+          ),
+        );
+    }
   }
 }
