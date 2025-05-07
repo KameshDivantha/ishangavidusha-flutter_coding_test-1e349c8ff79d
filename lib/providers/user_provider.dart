@@ -1,13 +1,7 @@
 import 'package:flutter/foundation.dart';
+
 import '../models/user.dart';
 import '../repositories/user_repository.dart';
-
-// TODO: Implement UserProvider using ChangeNotifier
-// Requirements:
-// - Create a class that extends ChangeNotifier
-// - Handle loading, success, and error states
-// - Use UserRepository for data fetching
-// - Notify listeners when state changes
 
 enum UserState {
   initial,
@@ -31,12 +25,18 @@ class UserProvider extends ChangeNotifier {
   UserProvider({UserRepository? userRepository}) 
       : _userRepository = userRepository ?? UserRepository();
   
-  // TODO: Implement fetchUser method
   Future<void> fetchUser(String userId) async {
-    // TODO: Implement state management for fetching user data
-    // - Set loading state
-    // - Call repository method
-    // - Handle success and error cases
-    // - Notify listeners
+    try {
+      _state = UserState.loading;
+      notifyListeners();
+      
+      _user = await _userRepository.getUser(userId);
+      _state = UserState.success;
+    } catch (e) {
+      _errorMessage = e.toString();
+      _state = UserState.error;
+    } finally {
+      notifyListeners();
+    }
   }
 }
