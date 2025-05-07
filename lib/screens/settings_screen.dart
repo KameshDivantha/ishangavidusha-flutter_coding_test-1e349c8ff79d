@@ -117,20 +117,61 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      Container(
-                        height: 200,
-                        decoration: BoxDecoration(
-                          color: Colors.blue.shade100,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        alignment: Alignment.center,
-                        // TODO: (Bonus) Apply custom visual effect
-                        // Requirements:
-                        // - Apply a custom visual effect using ImageFilter.shader 
-                        // - Create a simple shader (gradient or noise effect)
-                        child: const Text(
-                          'Profile Card',
-                          style: TextStyle(fontSize: 20),
+                      ShaderMask(
+                        shaderCallback: (Rect bounds) {
+                          return LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Colors.red.shade300,
+                              Colors.red.shade100,
+                              Colors.red.shade200,
+                            ],
+                          ).createShader(bounds);
+                        },
+                        child: Container(
+                          height: 200,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.1),
+                                blurRadius: 10,
+                                offset: const Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                          alignment: Alignment.center,
+                          child: ShaderMask(
+                            shaderCallback: (bounds) {
+                              return const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.black54,
+                                ],
+                                stops: [0.6, 1.0],
+                              ).createShader(bounds);
+                            },
+                            blendMode: BlendMode.darken,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.blue.shade100,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              alignment: Alignment.center,
+                              child: const Text(
+                                'Profile Card',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
